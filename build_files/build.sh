@@ -7,6 +7,10 @@ set -ouex pipefail
 # RPMFusion for goodies
 dnf5 -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm
 
+# Install Terra
+curl -fsSL https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo | pkexec tee > /etc/yum.repos.d/terra.repo
+dnf5 -y install terra-release
+
 # Install GNOME
 dnf5 -y install @gnome-desktop
 systemctl enable gdm
@@ -15,9 +19,7 @@ systemctl enable gdm
 dnf5 -y install chromium fedora-chromium-config
 
 # Keyd for cb keyboard mapping
-dnf5 -y copr enable alternateved/keyd
 dnf5 -y install keyd
-dnf5 -y copr disable alternatived/keyd
 systemctl enable keyd
 
 # Install linuxbrew
