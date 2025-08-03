@@ -24,7 +24,3 @@ systemctl enable keyd
 # Install linuxbrew
 mkdir /etc/skel/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /etc/skel/homebrew
 echo 'export PATH="$HOME/homebrew/bin:$PATH"' >> /etc/skel/.bash_profile
-
-# Init Skel
-cp -Rvf /etc/skel/*  /var/home/*/ || true
-cp -Rvf /etc/skel/.* /var/home/*/
