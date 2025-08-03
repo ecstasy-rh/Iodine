@@ -10,12 +10,18 @@ dnf5 -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release
 # Install Terra
 dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 
+# Use vanilla kernel for faster updates and more universal device support
+dnf5 -y copr enable @kernel-vanilla/stable
+dnf5 -y upgrade 'kernel*'
+dnf5 -y copr disable @kernel-vanilla/stable
+
 # Install GNOME
 dnf5 -y install @gnome-desktop
 systemctl enable gdm
 
 # Install Chromium
 dnf5 -y install chromium fedora-chromium-config
+dnf5 -y remove firefox
 
 # Keyd for cb keyboard mapping
 dnf5 -y install keyd
