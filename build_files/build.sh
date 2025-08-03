@@ -4,21 +4,32 @@ set -ouex pipefail
 
 ### Install packages
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
+# RPMFusion for goodies
+dnf5 -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
+# Install GNOME
+dnf5 -y install @gnome-desktop
+systemctl enable gdm
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+# Install Chrome
+echo '[google-chrome]
+name=google-chrome
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub' | tee /etc/yum.repos.d/google-chrome.repo
+dnf5 -y install google-chrome-stable
 
-#### Example for enabling a System Unit File
+# Keyd for cb keyboard mapping
+dnf5 -y copr enable alternateved/keyd
+dnf5 -y install keyd
+dnf5 -y copr disable alternatived/keyd
+systemctl enable keyd
 
-systemctl enable podman.socket
+# Install linuxbrew
+mkdir /etc/skel/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /etc/skel/homebrew
+echo 'export PATH="$HOME/homebrew/bin:$PATH"' >> /etc/skel/.bash_profile
+
+# Init Skel
+cp -Rvf /etc/skel/*  /var/home/*/ || true
+cp -Rvf /etc/skel/.* /var/home/*/
