@@ -27,6 +27,9 @@ dnf5 -y remove firefox
 dnf5 -y install keyd
 systemctl enable keyd
 
+# Ectool for low-level management related to the embedded controller
+dnf5 -y install chromium-ectool
+
 # Install linuxbrew
 mkdir /etc/skel/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /etc/skel/homebrew
 echo 'export PATH="$HOME/homebrew/bin:$PATH"' >> /etc/skel/.bash_profile
